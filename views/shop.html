@@ -15,15 +15,23 @@
         border: 1px solid #99ff99;
       }
       .team-image {
-        height: 150px;
+        height: 250px;
         margin: 10px;
       }
 
       .Shirt-Container {
         display: flex;
         gap: 2rem;
-        width: 80rem;
+        flex-wrap: wrap;
       }
+
+      .Shop-Card {
+        width: 16rem;
+        display: flex;
+        flex-flow: column nowrap;
+        text-align: center;
+      }
+
     </style>
     <script>
       // Make a request to the server
@@ -64,130 +72,53 @@
     <p>
       Instructions: Select your team from the list and buy your jersey today!
     </p>
+    <div id="message">Thank you for your purchase!</div>
     <section class="Shirt-Container">
-      <div>
-        <h2>Atlanta Falcons</h2>
-        <img
-          src="/images/falcons.jpg"
-          alt="Atlanta Falcons Jersey"
-          class="team-image"
-        />
-        <button type="button" onclick="showMessage()">Buy Jersey</button>
-
-        <div id="message">Thank you for your purchase!</div>
-
-        <script>
-          function showMessage() {
-            document.getElementById("message").style.display = "block";
-          }
-        </script>
-      </div>
-      <div>
-        <h2>Carolina Panthers</h2>
-        <img
-          src="/images/panthers.jpg"
-          alt="Carolina Panthers Jersey"
-          class="team-image"
-        />
-        <button type="button" onclick="showMessage()">Buy Jersey</button>
-
-        <div id="message">Thank you for your purchase!</div>
-
-        <script>
-          function showMessage() {
-            document.getElementById("message").style.display = "block";
-          }
-        </script>
-      </div>
-      <div>
-        <h2>New Orleans Saints</h2>
-        <img
-          src="/images/saints.jpg"
-          alt="New Orleans Saints Jersey"
-          class="team-image"
-        />
-        <button type="button" onclick="buyJersey('New Orleans Saints')">
-          Buy Jersey
-        </button>
-      </div>
-      <div>
-        <h2>Denver Broncos</h2>
-        <img
-          src="/images/broncos.jpg"
-          alt="Denver Broncos Jersey"
-          class="team-image"
-        />
-        <button type="button" onclick="buyJersey('Denver Broncos')">
-          Buy Jersey
-        </button>
-      </div>
-      <div>
-        <h2>Detroit Lions</h2>
-        <img
-          src="/images/lions.jpg"
-          alt="Detroit Lions Jersey"
-          class="team-image"
-        />
-        <button type="button" onclick="buyJersey('Detroit Lions')">
-          Buy Jersey
-        </button>
-      </div>
-      <div>
-        <h2>Dallas Cowboys</h2>
-        <img
-          src="/images/cowboys.jpg"
-          alt="Dallas Cowboys Jersey"
-          class="team-image"
-        />
-        <button type="button" onclick="buyJersey('Dallas Cowboys')">
-          Buy Jersey
-        </button>
-      </div>
-      <div>
-        <h2>New York Jets</h2>
-        <img
-          src="/images/jets.jpg"
-          alt="New York Jets Jersey"
-          class="team-image"
-        />
-        <button type="button" onclick="buyJersey('New York Jets')">
-          Buy Jersey
-        </button>
-      </div>
-      <div>
-        <h2>New York Giants</h2>
-        <img
-          src="/images/giants.jpg"
-          alt="New York Giants Jersey"
-          class="team-image"
-        />
-        <button type="button" onclick="buyJersey('New York Giants')">
-          Buy Jersey
-        </button>
-      </div>
-      <div>
-        <h2>Tennessee Titans</h2>
-        <img
-          src="/images/titans.jpg"
-          alt="New York Giants Jersey"
-          class="team-image"
-        />
-        <button type="button" onclick="buyJersey('New York Giants')">
-          Buy Jersey
-        </button>
-      </div>
-      <div>
-        <h2>New England Patriots</h2>
-        <img
-          src="/images/patriots.jpg"
-          alt="New YEngland Patriots Jersey"
-          class="team-image"
-        />
-        <button type="button" onclick="buyJersey('New York Giants')">
-          Buy Jersey
-        </button>
-      </div>
+      
     </section>
     <div></div>
+    <script>
+      let allJerseys = [];
+
+      fetch("/allJerseys", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: "Hello World"
+      })
+      .then( async (response) => {
+        console.log(response)
+        const data = await response.json();
+
+        allJerseys = data.jerseys;
+
+        const shirtContainer = document.querySelector('.Shirt-Container');
+
+        for (let jerseyIndex = 0; jerseyIndex < allJerseys.length; jerseyIndex++) {
+          const jersey = allJerseys[jerseyIndex];
+
+          const div = document.createElement('div');
+          const html = `<div class="Shop-Card">
+            <h2>${jersey.name}</h2>
+            <img src="${jersey.img}" alt="${jersey.name} Jersey" class="team-image" />
+            <button type="button" onclick="showMessage()">
+              Buy Jersey
+            </button>
+          </div>`;
+
+          div.innerHTML = html;
+
+          shirtContainer.append(div);
+      
+        }
+
+      } )
+
+
+      function showMessage() {
+        document.getElementById("message").style.display = "block";
+      }
+    </script>
   </body>
 </html>

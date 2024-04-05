@@ -1,6 +1,14 @@
-const express = require('express');
-const router = express.Router();
-const path = require("path");
+import {Router} from 'express';
+import path from "path";
+import { fileURLToPath } from 'url';
+import { Jersey } from '../models/index.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const router = Router()
+
+
 
 router.get("/", (request, response) => {
   console.log("Hit /");
@@ -32,5 +40,12 @@ router.post('/api/data', (req, res) => {
   res.json({ message: 'POST request handled', data: requestData });
 });
 
+router.post('/allJerseys', async (req, res) => {
+  console.log(req.body)
+  const jerseys = await Jersey.findAll({});
 
-module.exports = router;
+  res.json({jerseys: jerseys})
+})
+
+
+export default router;

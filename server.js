@@ -1,8 +1,7 @@
-const express = require("express");
-const router = require("./controller/routes.js")
+import express from "express";
+import router from "./controller/routes.js";
 
 // Setup
-const path = require("path");
 const app = express();
 const PORT = 4525;
 
